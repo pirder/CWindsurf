@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <title>Windsurf++</title>
+  <defs>
+    <linearGradient id="background" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#background)"/>
+  <g transform="scale(5.333333)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="2.4" d="M3.5 8.4L6.6 19L10.4 11.4L14.2 19L17 10.6"/>
+    <g stroke-width="1.7">
+      <path d="M15.7 4.5v3"/>
+      <path d="M14.2 6h3"/>
+      <path d="M21 4.5v3"/>
+      <path d="M19.5 6h3"/>
+    </g>
+  </g>
+</svg>
