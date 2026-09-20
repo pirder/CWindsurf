@@ -29,7 +29,16 @@ cwindsurf status
 
 # Uninstall
 cwindsurf uninstall
+
+# Help
+cwindsurf help
 ```
+
+If the application is installed in a non-standard location, set `CWINDSURF_APP_PATH` before installing; its value can be the application directory or an executable path.
+
+- Windows system-level installs may require an administrator terminal.
+- On Linux, system directories may require `sudo --preserve-env=HOME $(command -v cwindsurf) install`.
+- Linux certificate trust supports Debian/Ubuntu `update-ca-certificates` and Fedora/RHEL `update-ca-trust`.
 
 After installation:
 
@@ -42,15 +51,21 @@ After installation:
 
 ## Features
 
-- **Native model selection** — Custom models appear directly in Cascade's model list.
-- **Multiple protocols** — OpenAI Chat Completions, OpenAI Responses, Anthropic Messages, and Google Gemini APIs.
+- **Native model selection** — Custom models appear directly in Cascade's model list, with per-model logos (built-in provider icons, emoji, or uploaded PNG/JPG/WebP images).
+- **Multiple protocols** — OpenAI Chat Completions, OpenAI Responses, Anthropic Messages, and Google Gemini APIs, plus an optional Responses-Lite gateway compatibility mode for gateways that only implement that protocol.
 - **Local and cloud models** — Ollama, LM Studio, vLLM, llama.cpp, and common compatible cloud services.
 - **Agent tool calling** — Streaming text, reasoning/thinking, function calls, tool-result continuation, and multi-turn context.
 - **Visual configuration** — Manage providers, models, context limits, output limits, and protocol options from the sidebar.
-- **Stream reliability** — Idle timeouts, exponential backoff, rate-limit delays, and controlled reconnect behavior.
-- **Usage and cost analytics** — Tokens, estimated cost, latency, throughput, success rate, cache usage, and budget alerts.
+- **Multi-key rotation and failover** — Configure multiple API keys per provider with polling, load, and session affinity; keys are automatically rotated on auth, quota, or rate-limit errors with cooldown and `Retry-After` support.
+- **Custom request headers** — Send the official Devin/Windsurf `User-Agent` by default and attach provider-level custom headers to chat, commit generation, connection tests, health checks, and model listing.
+- **Stream reliability** — Idle timeouts, exponential backoff, rate-limit delays, controlled reconnect behavior, network-class auto-retry for Devin Local turns, and status-level retry for official forwarded requests.
+- **Usage and cost analytics** — Tokens, estimated cost, latency, throughput, success rate, cache usage, and budget alerts, with model prices synced from models.dev, LiteLLM, and OpenRouter.
 - **Local commit messages** — Choose a provider, model, and language for commit-message generation.
+- **Dynamic Island notifications** — Cross-platform native task status notifications (macOS, Windows, Linux) with themes, sizes, target screens, notch mode, privacy mode, and custom or built-in sounds.
+- **Native Cascade restore** — Reversible patch that restores Devin's native Cascade entry, session picker, and composer, and can set Cascade as the default agent for new conversations.
+- **UI language preference** — Choose between system language, Simplified Chinese, and English for the Windsurf++ panel.
 - **Device authorization** — LinuxDO/GitHub sign-in, device management, remote revocation, and signed leases.
+- **Remote workbench (Beta)** — End-to-end encrypted remote control from a browser or phone: browse computers, projects, and sessions; create, continue, stop, or archive tasks; inspect files, diffs, and terminals. Requires the desktop extension plus a self-hosted or public relay.
 - **Cross-platform installer** — macOS, Windows, and Linux.
 
 ## Provider Protocols
@@ -62,7 +77,7 @@ After installation:
 | `anthropic` | `/messages` | Anthropic Claude API and Messages-compatible services |
 | `gemini` | `/models/*:streamGenerateContent` | Google Gemini `v1` / `v1beta` streaming API |
 
-Compatibility depends on whether the target service fully implements streaming, tool calling, tool-result continuation, and usage fields. Run a connection test after adding a provider.
+Compatibility depends on whether the target service fully implements streaming, tool calling, tool-result continuation, and usage fields. Run a connection test after adding a provider. For gateways that only support the Responses-Lite protocol, enable the provider- or model-level Responses-Lite compatibility switch to add the required routing header.
 
 ## How It Works
 
@@ -80,11 +95,11 @@ Windsurf / Devin
       └─ Local analytics, authorization, and runtime status
 ```
 
-The installer creates backups before modifying application files. `cwindsurf uninstall` removes the patches and extension and can optionally back up user configuration first.
+The installer creates backups before modifying application files. `cwindsurf uninstall` can back up user data first, then removes the patches, extension, caches, and the entire `~/.cwindsurf/` directory — back up provider keys or statistics you want to keep before uninstalling.
 
 ## Local Data and Privacy
 
-Configuration is stored under `~/.cwindsurf/`. Provider API keys stay on the local device. Runtime statistics are aggregated locally by default, and full prompts or responses are not required for normal analytics.
+Configuration is stored under `~/.cwindsurf/`. Provider API keys stay on the local device; refresh tokens and device private keys are kept in the editor's SecretStorage instead of plain config files. Runtime statistics are aggregated locally by default, and full prompts or responses are not required for normal analytics. Development traffic-capture tooling is not included in public builds; public artifacts are bundled, minified, obfuscated, and signed with Ed25519 release manifests.
 
 Never publish API keys, OAuth tokens, refresh tokens, device private keys, release signing keys, or configuration files containing secrets.
 
@@ -97,6 +112,10 @@ Never publish API keys, OAuth tokens, refresh tokens, device private keys, relea
 | Linux | Supported |
 
 Application updates may overwrite patches. Run `cwindsurf status` after updating Windsurf/Devin and reinstall when necessary.
+
+## Releases
+
+Version history and per-release notes are published with the npm package: see the [CHANGELOG](https://www.npmjs.com/package/@priders/cwindsurf?activeTab=code) in `@priders/cwindsurf`.
 
 ## Issues and Feedback
 
